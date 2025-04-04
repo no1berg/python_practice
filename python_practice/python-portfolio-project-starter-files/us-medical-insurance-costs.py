@@ -78,9 +78,52 @@ with open("insurance.csv", newline="") as insurance_csv:
     insurance_dict = {}
     key = 0
     for row in insurance_reader:
-        insurance_dict.update({key: {"Age": row["age"], "Sex": row["sex"]}})
+        insurance_dict.update(
+            {
+                key: {
+                    "Age": row["age"],
+                    "Sex": row["sex"],
+                    "BMI": row["bmi"],
+                    "Children": row["children"],
+                    "Smoker": row["smoker"],
+                    "Region": row["region"],
+                    "Charges": row["charges"],
+                }
+            }
+        )
         key += 1
-
 # |%%--%%| <xK8mSQj3mb|7724HFYqDY>
 
-insurance_dict[1]
+# |%%--%%| <7724HFYqDY|Q5inowk3D2>
+r"""°°°
+# Step 4. Data Analysis
+°°°"""
+
+# |%%--%%| <Q5inowk3D2|JD3ZdppvDS>
+
+# Is there a difference in average charge when grouped by sex?
+
+# Create a new dictionary with sex as the key
+insurance_sex_dict = {}
+for record in insurance_dict.values():
+    key = record.get("Sex")
+    insurance_sex_dict.setdefault(key, []).append(record)
+
+insurance_sex_dict["female"][2].get("Charges")
+
+
+def calculate_average_cost(data):
+    female_avg_charg_male_avg_charge = []
+    for record in data.values():
+        total_charge = 0
+        total_patients = len(record)
+        for details in record:
+            charge = float(details.get("Charges"))
+            total_charge += charge
+        average_charge = total_charge / float(total_patients)
+        female_avg_charg_male_avg_charge.append(average_charge)
+    return female_avg_charg_male_avg_charge
+
+
+f_m_avg_charge = calculate_average_cost(insurance_sex_dict)
+print(f_m_avg_charge)
